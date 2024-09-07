@@ -1,0 +1,96 @@
+import pygame
+pygame.init()
+
+black = (0, 0, 0)
+white = (225, 225, 255)
+screen_size = (1366, 768)
+player_Width = 30 
+player_height = 160
+Ball_R = 30
+
+screen = pygame.display.set_mode(screen_size)
+clock = pygame.time.Clock()
+pygame.mouse.set_visible(0)
+
+player1_x_coor = 50
+player1_y_coor = 270
+player1_y_speed = 3
+
+player2_x_coor = 1305
+player2_y_coor = 270
+player2_y_speed = 3
+
+Ball_x_coor = 683
+Ball_y_coor = 384
+Ball_x_speed = 5
+Ball_y_speed = 5
+
+game_over = False
+
+while not game_over: 
+	for event in pygame.event.get():
+		if event.type == pygame.QUIT:
+			game_over = True
+
+		if event.type == pygame.KEYDOWN:
+
+			if event.key == pygame.K_UP:
+				player2_y_speed = -4
+
+			if event.key == pygame.K_DOWN:
+				player2_y_speed = 4
+
+			if event.key == pygame.K_w:
+				player1_y_speed = -4
+
+			if event.key == pygame.K_s:
+				player1_y_speed = 4
+
+		if event.type == pygame.KEYUP:
+			
+			if event.key == pygame.K_w:
+				player1_y_speed = 0
+
+			if event.key == pygame.K_s:
+				player1_y_speed = 0
+
+			if event.key == pygame.K_UP:
+				player2_y_speed = 0
+
+			if event.key == pygame.K_DOWN:
+				player2_y_speed = 0
+
+
+		if (player2_y_coor > 600 or player2_y_coor < 0):
+			player2_y_speed *= -1
+
+		if (player1_y_coor > 600 or player1_y_coor < 0):
+			player1_y_speed *= -1
+
+		if (Ball_x_coor > 1280 or Ball_x_coor < 60):
+			Ball_x_coor = 683
+			Ball_y_coor = 384
+
+		if (Ball_y_coor > 695 or Ball_y_coor < 60):
+			Ball_y_speed *= -1
+
+		player1_y_coor += player1_y_speed
+		player2_y_coor += player2_y_speed
+
+		Ball_x_coor += Ball_x_speed
+		Ball_y_coor += Ball_y_speed
+
+		screen.fill(black)
+
+		pelota = pygame.draw.circle(screen, white, (Ball_x_coor, Ball_y_coor), Ball_R)
+
+		player2 = pygame.draw.rect(screen, white, (player2_x_coor, player2_y_coor, player_Width, player_height))
+
+		player1 = pygame.draw.rect(screen, white, (player1_x_coor, player1_y_coor, player_Width, player_height))
+
+		if pelota.colliderect(player1) or pelota.colliderect(player2):
+			Ball_x_speed *= -1
+
+	pygame.display.flip()
+	clock.tick(60)
+pygame.quit()
